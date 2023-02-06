@@ -1,8 +1,8 @@
 {
-  "name": "new-folder",
+  "name": "andalus-create-express-app",
   "version": "1.0.0",
-  "description": "",
-  "bin":"./bin/cli/js",
+  "description": "this my method to create starter express app with all foulder and structure with connect with mongoDB",
+  "bin": "./bin/cli.js",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

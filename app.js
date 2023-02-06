@@ -5,7 +5,6 @@ const port = process.env.PORT || 5000;
 // custom MW for all
 // ----
 //*Router
-const indexRouter = require("./app/routes/index");
 const studentRouter = require("./app/routes/studentRstructure_db");
 const usersRouter = require("./app/routes/users");
 const authRouter = require("./app/routes/auth");
@@ -14,7 +13,6 @@ const adminRouter = require("./app/routes/admin");
 const error_MW = require("./app/middleware/error_MW");
 // ____________________________________________________________________________________
 /* Express Routers */
-app.use("/", indexRouter);
 app.use("/api/students", studentRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", authRouter);
