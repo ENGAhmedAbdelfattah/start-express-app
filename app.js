@@ -1,36 +1,43 @@
 const app = require("./config/server");
-const port = process.env.PORT || 5000;
+const categoriesRouter = require("./app/routes/categories_R");
+const subCategoriesRouter = require("./app/routes/subCategories_R");
+const subBrandsRouter = require("./app/routes/brands_R");
+const productsRouter = require("./app/routes/products_R");
+const usersRouter = require("./app/routes/users_R");
+const authRouter = require("./app/routes/auth_R");
 
-//-- require files
-// custom MW for all
-// ----
-//*Router
-const studentRouter = require("./app/routes/studentRstructure_db");
-const usersRouter = require("./app/routes/users");
-const authRouter = require("./app/routes/auth");
-const adminRouter = require("./app/routes/admin");
-//*MW
-const error_MW = require("./app/middleware/error_MW");
-// ____________________________________________________________________________________
-/* Express Routers */
-app.use("/api/students", studentRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/login", authRouter);
-app.use("/api/admin", adminRouter);
+const allRouter = require("./app/routes/all_R");
+const globalErrorMiddleware = require("./app/middleware/globalError_MW");
 
-// ____________________________________________________________________________________
-/* Error Handle MW*/
-// error MW
-app.use(error_MW);
+app.use("/api/v1/categories", categoriesRouter);
+app.use("/api/v1/subcategories", subCategoriesRouter);
+app.use("/api/v1/brands", subBrandsRouter);
+app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/auth", authRouter);
 
-app.listen(port, () =>
-  console.log("> Server is up and running on port : " + port)
+app.use("*", allRouter);
+app.use(globalErrorMiddleware);
+
+const port = process.env.PORT || 8000;
+const server = app.listen(port, () =>
+  console.log(`Server is up and running on port : ${port}`)
 );
 
-// if(!process.env.PORT) {
-//   console.log("PORT isn't set!")
-//   process.exit(1);
-// };
+process.on("uncaughtException", (err) => {
+  console.log(`uncaught Exception Error ${err.name} ${err.message}`);
+  server.close(() => {
+    console.error(`shutting down....`);
+    process.exit(1);
+  });
+});
 
-// express structure folder is:
-/* [app.js => server.js => 📁router => 📁controller => 📁models => ("📁Data folder with 💾Json file" or "🛢️Database ex mongoDB")] */
+process.on("unhandledRejection", (err) => {
+  console.log(
+    `unhandledRejection Promise Error -- ${err.name} -- ${err.message}`
+  );
+  server.close(() => {
+    console.error(`shutting down....`);
+    process.exit(1);
+  });
+});
